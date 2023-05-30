@@ -20,9 +20,6 @@
 
 
 <style>
-
-
-
 	
   /* Dark Mode Styles */
   body.dark-mode,
@@ -43,6 +40,13 @@ body.dark-mode .tooltip {
   padding: 10px;
   font-size: 12px;
 }
+
+
+
+ body.dark-mode #search-bar {
+    color: #000; /* Specify the desired text color for dark mode */
+background-color : #999
+  }
 
   body.dark-mode svg .x-label {
     /* Override SVG text color */
@@ -144,6 +148,12 @@ body.dark-mode .toggle-slider {
 
 body.dark-mode input:checked + .toggle-slider:before {
   background-color: #ccc; /* Darker background color for dark mode */
+}
+
+
+circle.highlighted {
+  stroke: #ff00ff;
+  stroke-width: 3px;
 }
 
 
@@ -407,7 +417,7 @@ width: 120px;
   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
 }
 
-	.button-9 {
+.button-9 {
   align-items: center;
   background-color: #F9F9F9;
   border-radius: 25px;
@@ -442,7 +452,6 @@ width: 120px;
 .button-9:hover {
   box-shadow: rgba(0, 0, 0, 0.4) 3px 3px 3px;
 }
-
 
 .button-8 {
   align-items: center;
@@ -480,6 +489,15 @@ width: 120px;
 }
 
 
+#search-bar {
+    position: absolute;
+    top: 726px; /* Adjust the desired top position */
+    left: 730px; /* Adjust the desired left position */
+  }
+
+  #search-bar::placeholder {
+    color: #fff; /* Specify the desired color for the placeholder text */
+  }
 </style>
 	
 </head>
@@ -499,6 +517,7 @@ width: 120px;
     <div class="toggle-icon"></div>
   </div>
 <svg id="scatter-plot"></svg>
+<input type="text" id="search-bar" placeholder="Search player...">
 <script>
   var csvData = `ID,Player,Minutes played,Duels per 90,Duels won %,Successful defensive actions per 90,Defensive duels per 90,Defensive duels won %,Aerial duels per 90,Aerial duels won %,PAdj Sliding tackles,PAdj Interceptions,Fouls per 90,Yellow cards per 90,Passes per 90,Accurate passes %,Forward passes per 90,Accurate forward passes %,Back passes per 90,Accurate back passes %,Lateral passes per 90,Accurate lateral passes %,Short / medium passes per 90,Accurate short / medium passes %,Long passes per 90,Accurate long passes %,Average pass length m,Average long pass length m,Third assists per 90,Key passes per 90,Passes to final third per 90,Accurate passes to final third %,Passes to penalty area per 90,Accurate passes to penalty area %,Through passes per 90,Accurate through passes %,Progressive passes per 90,Accurate progressive passes %,Conceded goals per 90,Shots against per 90,Save rate %,xG against per 90,Prevented goals per 90,Back passes received as GK per 90,Exits per 90,Aerial duels per 90
 1,T. Courtois,4825,0.62,84.85,1.66,0.09,60,0.32,100,0.03,2.16,0,0.02,25.52,89.04,11.4,76.92,0.04,100,13.04,98.86,19.79,98.49,5.73,56.35,28.11,48.56,0,0,1.18,36.51,0.07,25,0.21,45.45,3.79,59.11,0.84,3.64,76.92,1.01,0.17,0,0.93,0.32
@@ -686,6 +705,7 @@ width: 120px;
 183,Rafael Bracali,2669,1.08,84.38,2.19,0.07,50,0.64,89.47,0.04,2.8,0,0.03,13.15,86.41,7.86,79.4,0,0,4.72,97.14,7.35,98.62,5.77,71.35,34.27,44.81,0,0,0.81,62.5,0.03,0,0,0,5.09,77.48,1.35,3.98,66.1,1.33,-0.022,0,1.69,0.64
 184,Rafa Oliveira,1183,0.91,83.33,1.52,0.38,60,0.3,100,0,1.93,0,0.08,16.36,86.05,9.81,79.07,0,0,5.71,97.33,10.42,97.81,5.86,66.23,29.96,42.15,0,0,0.84,36.36,0,0,0,0,4.72,62.9,1.29,3.73,65.31,1.25,-0.045,0,1.83,0.3`;
 
+
   var rows = csvData.trim().split('\n');
   var header = rows[0].split(',');
   var data = rows.slice(1).map(function(row) {
@@ -820,6 +840,24 @@ var names = rows.slice(1).map(function(row) {
   return row.split(',')[1];
 });
 
+var searchBar = document.getElementById("search-bar");
+
+searchBar.addEventListener("input", function() {
+  var searchTerm = searchBar.value.toLowerCase();
+
+  if (searchTerm === '') {
+    resetSearch();
+    return;
+  }
+
+  circles.classed("highlighted", false);
+
+  circles.filter(function(d, i) {
+      return names[i].toLowerCase().includes(searchTerm);
+    })
+    .classed("highlighted", true);
+});
+
 
 
 var clickedCircles = []; // array to keep track of clicked circles
@@ -924,6 +962,10 @@ yScale.domain(d3.extent(data, function(d) { return d[header.indexOf(yMetric)]; }
 }
 
 
+function resetSearch() {
+  searchBar.value = '';
+  circles.classed("highlighted", false);
+}
 
 
 </script>
