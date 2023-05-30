@@ -1,5 +1,6 @@
 
 
+
 <html>
 <head>
 
@@ -19,6 +20,8 @@
 	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 <style>
+
+
 	
   /* Dark Mode Styles */
   body.dark-mode,
@@ -47,10 +50,9 @@ body.dark-mode .tooltip {
 background-color : #999
   }
 	
-	 body.dark-mode	  #search-bar::placeholder {
+ body.dark-mode	  #search-bar::placeholder {
     color: #fff; /* Specify the desired color for the placeholder text */
   }
-
 
   body.dark-mode svg .x-label {
     /* Override SVG text color */
@@ -113,7 +115,7 @@ body.dark-mode .button-8:focus {
  .dark-mode-toggle {
     position: absolute;
     top: 716.5px;
-    left: 630px;
+    left: 684.5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -496,8 +498,42 @@ width: 120px;
 #search-bar {
     position: absolute;
     top: 726px; /* Adjust the desired top position */
-    left: 730px; /* Adjust the desired left position */
+    left: 760px; /* Adjust the desired left position */
   }
+
+
+.toggle-button {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+position: absolute;
+top: 717px;
+left: 611px;
+}
+
+.toggle-button:hover {
+  background-color: #eaeaea;
+}
+
+.toggle-button:focus {
+  outline: none;
+}
+
+.toggle-button:active {
+  background-color: #ccc;
+}
+
+
+
+.icon::before {
+  content: "\f2b5";
+  font-family: "Ionicons"; /* Replace with the appropriate font */
+font-size: 22px;
+}
+
 
 </style>
 	
@@ -519,8 +555,9 @@ width: 120px;
   </div>
 <svg id="scatter-plot"></svg>
 <input type="text" id="search-bar" placeholder="Search player...">
+<button id="toggle-median-lines" class="toggle-button"><div class="icon"></div></button>
 <script>
-  var csvData = `ID,Player,Minutes played,Duels per 90,Duels won %,Successful defensive actions per 90,Defensive duels per 90,Defensive duels won %,Aerial duels per 90,Aerial duels won %,PAdj Sliding tackles,PAdj Interceptions,Fouls per 90,Yellow cards per 90,Passes per 90,Accurate passes %,Forward passes per 90,Accurate forward passes %,Back passes per 90,Accurate back passes %,Lateral passes per 90,Accurate lateral passes %,Short / medium passes per 90,Accurate short / medium passes %,Long passes per 90,Accurate long passes %,Average pass length m,Average long pass length m,Third assists per 90,Key passes per 90,Passes to final third per 90,Accurate passes to final third %,Passes to penalty area per 90,Accurate passes to penalty area %,Through passes per 90,Accurate through passes %,Progressive passes per 90,Accurate progressive passes %,Conceded goals per 90,Shots against per 90,Save rate %,xG against per 90,Prevented goals per 90,Back passes received as GK per 90,Exits per 90,Aerial duels per 90
+ var csvData = `ID,Player,Minutes played,Duels per 90,Duels won %,Successful defensive actions per 90,Defensive duels per 90,Defensive duels won %,Aerial duels per 90,Aerial duels won %,PAdj Sliding tackles,PAdj Interceptions,Fouls per 90,Yellow cards per 90,Passes per 90,Accurate passes %,Forward passes per 90,Accurate forward passes %,Back passes per 90,Accurate back passes %,Lateral passes per 90,Accurate lateral passes %,Short / medium passes per 90,Accurate short / medium passes %,Long passes per 90,Accurate long passes %,Average pass length m,Average long pass length m,Third assists per 90,Key passes per 90,Passes to final third per 90,Accurate passes to final third %,Passes to penalty area per 90,Accurate passes to penalty area %,Through passes per 90,Accurate through passes %,Progressive passes per 90,Accurate progressive passes %,Conceded goals per 90,Shots against per 90,Save rate %,xG against per 90,Prevented goals per 90,Back passes received as GK per 90,Exits per 90,Aerial duels per 90
 1,T. Courtois,4825,0.62,84.85,1.66,0.09,60,0.32,100,0.03,2.16,0,0.02,25.52,89.04,11.4,76.92,0.04,100,13.04,98.86,19.79,98.49,5.73,56.35,28.11,48.56,0,0,1.18,36.51,0.07,25,0.21,45.45,3.79,59.11,0.84,3.64,76.92,1.01,0.17,0,0.93,0.32
 2,G. Donnarumma,4625,0.47,70.83,1.13,0.06,0,0.29,86.67,0,1.54,0.02,0.06,15.96,89.76,7.78,81.25,0,0,7.22,97.84,12.82,98.79,3.13,52.8,23.14,37.06,0,0,0.12,33.33,0,0,0,0,2.57,45.45,0.95,4.03,76.33,1.17,0.217,0,1.17,0.29
 3,Alisson,4807,0.71,81.58,1.97,0.11,33.33,0.45,87.5,0,2.86,0.02,0.02,25.89,89.52,12.04,79.78,0,0,12.66,98.96,19.98,98.13,5.9,60.63,26.79,44.92,0.02,0.04,1.44,50.65,0.09,40,0.17,44.44,3.97,65.09,1.12,3.61,68.91,1.18,0.054,0,1.09,0.45
@@ -707,6 +744,7 @@ width: 120px;
 184,Rafa Oliveira,1183,0.91,83.33,1.52,0.38,60,0.3,100,0,1.93,0,0.08,16.36,86.05,9.81,79.07,0,0,5.71,97.33,10.42,97.81,5.86,66.23,29.96,42.15,0,0,0.84,36.36,0,0,0,0,4.72,62.9,1.29,3.73,65.31,1.25,-0.045,0,1.83,0.3`;
 
 
+
   var rows = csvData.trim().split('\n');
   var header = rows[0].split(',');
   var data = rows.slice(1).map(function(row) {
@@ -719,12 +757,13 @@ width: 120px;
   var width = 1080 - margin.left - margin.right;
   var height = 720 - margin.top - margin.bottom;
 
-// select the container element and set its position to relative
+var medianLinesVisible = false;
+
+
 var container = d3.select("body")
   .append("div")
   .style("position", "relative");
 
-// create the first select element and position it to the left of the container
 var selectX = container.append("select")
   .attr("id", "select-x")
   .on("change", updateChart)
@@ -732,13 +771,18 @@ var selectX = container.append("select")
   .style("left", "80px")
   .style("top", "0px");
 
-// create the second select element and position it to the right of the container
 var selectY = container.append("select")
   .attr("id", "select-y")
   .on("change", updateChart)
   .style("position", "absolute")
   .style("left", "330px")
   .style("top", "0px");
+
+
+var xMedian = d3.median(data, function(d) { return d[header.indexOf(xMetric)]; });
+var yMedian = d3.median(data, function(d) { return d[header.indexOf(yMetric)]; });
+
+
 
 
   header.slice(2).forEach(function(metric) {
@@ -830,9 +874,7 @@ tooltip.style("position", "absolute")
   .style("font-size", "12px");
 	
 	document.addEventListener('touchstart', function(event) {
-  // Check if the touch event target is the tooltip or one of its child elements
   if (!tooltip.contains(event.target)) {
-    // Hide the tooltip if the touch event target is not the tooltip or one of its child elements
     tooltip.style.display = 'none';
   }
 });
@@ -939,6 +981,29 @@ svg.append("text")
 
 
 
+// X-axis median line
+var xMedianLine = svg.append("line")
+  .attr("class", "x-median")
+  .attr("x1", xScale(xMedian))
+  .attr("y1", 0)
+  .attr("x2", xScale(xMedian))
+  .attr("y2", height)
+  .style("stroke", "red")
+  .style("stroke-dasharray", "4")
+  .style("display", medianLinesVisible ? "block" : "none");
+
+// Y-axis median line
+var yMedianLine = svg.append("line")
+  .attr("class", "y-median")
+  .attr("x1", 0)
+  .attr("y1", yScale(yMedian))
+  .attr("x2", width)
+  .attr("y2", yScale(yMedian))
+  .style("stroke", "red")
+  .style("stroke-dasharray", "4")
+  .style("display", medianLinesVisible ? "block" : "none");
+
+
 
 
 function updateChart() {
@@ -949,6 +1014,37 @@ function updateChart() {
 
 xScale.domain(d3.extent(data, function(d) { return d[header.indexOf(xMetric)]; })).nice();
 yScale.domain(d3.extent(data, function(d) { return d[header.indexOf(yMetric)]; })).nice();
+ 
+// Remove existing median lines
+svg.selectAll(".median-line").remove();
+
+// Create new median lines
+if (medianLinesVisible) {
+  // Calculate the new medians based on the selected metrics
+  var xMedian = d3.median(data, function(d) { return d[header.indexOf(xMetric)]; });
+  var yMedian = d3.median(data, function(d) { return d[header.indexOf(yMetric)]; });
+
+  // X-axis median line
+  svg.append("line")
+    .attr("class", "median-line")
+    .attr("x1", xScale(xMedian))
+    .attr("y1", 0)
+    .attr("x2", xScale(xMedian))
+    .attr("y2", height)
+    .style("stroke", "red")
+    .style("stroke-dasharray", "4");
+
+  // Y-axis median line
+  svg.append("line")
+    .attr("class", "median-line")
+    .attr("x1", 0)
+    .attr("y1", yScale(yMedian))
+    .attr("x2", width)
+    .attr("y2", yScale(yMedian))
+    .style("stroke", "red")
+    .style("stroke-dasharray", "4");
+}
+
 
 
   svg.select(".x-label")
@@ -971,6 +1067,20 @@ yScale.domain(d3.extent(data, function(d) { return d[header.indexOf(yMetric)]; }
     .transition()
     .duration(1000)
     .call(d3.axisLeft(yScale).tickSize(0));
+
+  svg.select(".x-median")
+    .transition()
+    .duration(1000)
+    .attr("x1", xScale(xMedian))
+    .attr("x2", xScale(xMedian));
+
+  svg.select(".y-median")
+    .transition()
+    .duration(1000)
+    .attr("y1", yScale(yMedian))
+    .attr("y2", yScale(yMedian));
+
+
 }
 
 
@@ -980,28 +1090,46 @@ function resetSearch() {
 }
 
 
+
+function resetMedianLines() {
+  svg.selectAll(".median-line").remove();
+}
+
+
+var toggleButton = document.getElementById("toggle-median-lines");
+toggleButton.addEventListener("click", function() {
+  medianLinesVisible = !medianLinesVisible; // toggle the visibility state
+
+  if (medianLinesVisible) {
+    updateChart();
+  } else {
+    svg.selectAll(".median-line").remove(); // Remove existing median lines
+  }
+});
+
+
+
 </script>
 
 <a href="https://datamb.football/plots/" target="_blank" rel="noopener noreferrer">
   <button class="button-1" role="button">Home</button>
-<a href="https://datamb.football/plotgk/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/gkpl/" target="_blank" rel="noopener noreferrer">
   <button class="button-2" role="button">Goalkeepers</button>
-<a href="https://datamb.football/plotcb/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/plcb/" target="_blank" rel="noopener noreferrer">
   <button class="button-3" role="button">Centrebacks</button>
-<a href="https://datamb.football/plotfb/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/plfb/" target="_blank" rel="noopener noreferrer">
   <button class="button-4" role="button">Fullbacks</button>
-<a href="https://datamb.football/plotcm/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/plcm/" target="_blank" rel="noopener noreferrer">
   <button class="button-5" role="button">Midfielders</button>
-<a href="https://datamb.football/plotfw/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/plfw/" target="_blank" rel="noopener noreferrer">
   <button class="button-6" role="button">Wingers</button>
-<a href="https://datamb.football/plotst/" target="_blank" rel="noopener noreferrer">
+<a href="https://datamb.football/plst/" target="_blank" rel="noopener noreferrer">
   <button class="button-7" role="button">Strikers</button>
 	<a href="https://datamb.football/radars/" target="_blank" rel="noopener noreferrer">
   <button class="button-9" role="button">Radars</button>
 <a href="https://twitter.com/DataMB_" target="_blank" rel="noopener noreferrer">
   <button class="button-8" role="button">@DataMB_</button>
 </a>
-
 <script>
 
     // Function to toggle dark mode
@@ -1026,3 +1154,4 @@ function resetSearch() {
 
 </body>
 </html>
+
